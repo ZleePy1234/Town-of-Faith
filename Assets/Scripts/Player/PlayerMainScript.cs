@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -47,6 +48,63 @@ public class PlayerMainScript : MonoBehaviour
     public int healthCurrent;
     public int armorMax;
     public int armorCurrent;
+
+    public void DamagePlayer(int damage, string damageType, bool isDarkDamage)
+    {
+        Debug.Log($"Took {damage} {damageType}, is it dark damage? {isDarkDamage}");
+        if (damageType == "melee")
+        {
+            if (armorCurrent >= damage)
+            {
+                Debug.Log("Damage only done to armor");
+                armorCurrent -= damage;
+            }
+            else
+            {
+                Debug.Log("damage reduced by armor left");
+                healthCurrent -= damage - armorCurrent;
+                armorCurrent = 0;
+            }
+        }
+        else if (damageType == "ranged")
+        {
+            if (armorCurrent >= damage / 2)
+            {
+                Debug.Log("Damage was split between armor and health");
+                armorCurrent -= damage / 2;
+                healthCurrent -= damage / 2;
+            }
+            else
+            {
+                if (armorCurrent == 0)
+                {
+                    Debug.Log("No armor left, taking full damage");
+                    healthCurrent -= damage;
+                }
+                else
+                {
+                    Debug.Log("Armor depleted! health still taking half damage");
+                    healthCurrent -= damage / 2;
+                    armorCurrent = 0;
+                }
+                
+            }
+        }
+        else if (damageType == "environment")
+        {
+            if (isDarkDamage)
+            {
+                Debug.Log("Dark Damage Attack! armor depleted instantly, taking double damage");
+                armorCurrent = 0;
+                healthCurrent -= damage * 2;
+            }
+        }
+        else
+        {
+            Debug.Log("Damage doesnt fall into any type, damage nullified");
+            healthCurrent -= 0;
+        }
+    }
 
 
     private void Inputs()
