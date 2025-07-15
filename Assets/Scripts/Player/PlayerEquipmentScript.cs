@@ -40,13 +40,6 @@ public class PlayerEquipmentScript : MonoBehaviour
     public GameObject selectedWeaponHitboxLeft;
     public GameObject selectedWeaponHitboxRight;
     [Space(10)]
-
-    [Header("Weapon UI")]
-    [Space(5)]
-    [SerializeField] private GameObject[] meleeUIArrayLeft = new GameObject[3];
-    [SerializeField] private GameObject[] meleeUIArrayRight = new GameObject[3];
-    [SerializeField] private GameObject[] weaponIconsLeft = new GameObject[5];
-    [SerializeField] private GameObject[] weaponIconsRight = new GameObject[5];
     #endregion
 
     #region Gun System
@@ -94,11 +87,7 @@ public class PlayerEquipmentScript : MonoBehaviour
     [SerializeField] private GameObject[] weaponBulletPrefabs = new GameObject[5];
     [SerializeField] private int[] weaponAmmoLeft = new int[5];
     [SerializeField] private int[] weaponAmmoRight = new int[5];
-    [SerializeField] private int[] weaponReserveAmmo = new int[5];
-    [SerializeField] private GameObject weaponAmmoUILeft;
-    [SerializeField] private GameObject weaponAmmoUIRight;
-    [SerializeField] private GameObject weaponReloadUILeft;
-    [SerializeField] private GameObject weaponReloadUIRight;
+    public int[] weaponReserveAmmo = new int[5];
     [SerializeField] private WeaponData[] weaponDataArray = new WeaponData[5];
 
     private bool handSwitchActive = false;
@@ -278,9 +267,6 @@ public class PlayerEquipmentScript : MonoBehaviour
             default:
                 selectedMeleeLeft = SelectedMeleeLeft.Empty;
                 selectedWeaponHitboxLeft = meleeHitboxArray[0];
-                meleeUIArrayLeft[0].SetActive(false);
-                meleeUIArrayLeft[1].SetActive(false);
-                meleeUIArrayLeft[2].SetActive(false);
                 return;
             case 0:
                 if (meleeObtained[0] == false)
@@ -295,9 +281,6 @@ public class PlayerEquipmentScript : MonoBehaviour
                 {
                     selectedMeleeLeft = SelectedMeleeLeft.Empty;
                     selectedWeaponHitboxLeft = meleeHitboxArray[0];
-                    meleeUIArrayLeft[0].SetActive(false);
-                    meleeUIArrayLeft[1].SetActive(false);
-                    meleeUIArrayLeft[2].SetActive(false);
                     return;
                 }
             case 1:
@@ -313,9 +296,6 @@ public class PlayerEquipmentScript : MonoBehaviour
                 {
                     selectedMeleeLeft = SelectedMeleeLeft.Screwdriver;
                     selectedWeaponHitboxLeft = meleeHitboxArray[1];
-                    meleeUIArrayLeft[0].SetActive(true);
-                    meleeUIArrayLeft[1].SetActive(false);
-                    meleeUIArrayLeft[2].SetActive(false);
                     return;
                 }
             case 2:
@@ -331,9 +311,6 @@ public class PlayerEquipmentScript : MonoBehaviour
                 {
                     selectedMeleeLeft = SelectedMeleeLeft.Cleaver;
                     selectedWeaponHitboxLeft = meleeHitboxArray[2];
-                    meleeUIArrayLeft[0].SetActive(false);
-                    meleeUIArrayLeft[1].SetActive(true);
-                    meleeUIArrayLeft[2].SetActive(false);
                     return;
                 }
             case 3:
@@ -349,9 +326,6 @@ public class PlayerEquipmentScript : MonoBehaviour
                 {
                     selectedMeleeLeft = SelectedMeleeLeft.Hammer;
                     selectedWeaponHitboxLeft = meleeHitboxArray[3];
-                    meleeUIArrayLeft[0].SetActive(false);
-                    meleeUIArrayLeft[1].SetActive(false);
-                    meleeUIArrayLeft[2].SetActive(true);
                     return;
                 }
         }
@@ -363,9 +337,6 @@ public class PlayerEquipmentScript : MonoBehaviour
             default:
                 selectedMeleeRight = SelectedMeleeRight.Empty;
                 selectedWeaponHitboxRight = meleeHitboxArray[0];
-                meleeUIArrayRight[0].SetActive(false);
-                meleeUIArrayRight[1].SetActive(false);
-                meleeUIArrayRight[2].SetActive(false);
                 return;
             case 0:
                 if (meleeObtained[0] == false)
@@ -378,9 +349,6 @@ public class PlayerEquipmentScript : MonoBehaviour
                 {
                     selectedMeleeRight = SelectedMeleeRight.Empty;
                     selectedWeaponHitboxRight = meleeHitboxArray[0];
-                    meleeUIArrayRight[0].SetActive(false);
-                    meleeUIArrayRight[1].SetActive(false);
-                    meleeUIArrayRight[2].SetActive(false);
                     return;
                 }
             case 1:
@@ -394,9 +362,6 @@ public class PlayerEquipmentScript : MonoBehaviour
                 {
                     selectedMeleeRight = SelectedMeleeRight.Screwdriver;
                     selectedWeaponHitboxRight = meleeHitboxArray[1];
-                    meleeUIArrayRight[0].SetActive(true);
-                    meleeUIArrayRight[1].SetActive(false);
-                    meleeUIArrayRight[2].SetActive(false);
                     return;
                 }
             case 2:
@@ -410,9 +375,6 @@ public class PlayerEquipmentScript : MonoBehaviour
                 {
                     selectedMeleeRight = SelectedMeleeRight.Cleaver;
                     selectedWeaponHitboxRight = meleeHitboxArray[2];
-                    meleeUIArrayRight[0].SetActive(false);
-                    meleeUIArrayRight[1].SetActive(true);
-                    meleeUIArrayRight[2].SetActive(false);
                     return;
                 }
             case 3:
@@ -426,9 +388,6 @@ public class PlayerEquipmentScript : MonoBehaviour
                 {
                     selectedMeleeRight = SelectedMeleeRight.Hammer;
                     selectedWeaponHitboxRight = meleeHitboxArray[3];
-                    meleeUIArrayRight[0].SetActive(false);
-                    meleeUIArrayRight[1].SetActive(false);
-                    meleeUIArrayRight[2].SetActive(true);
                     return;
                 }
         }
