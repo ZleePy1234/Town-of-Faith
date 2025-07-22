@@ -92,6 +92,13 @@ public class PlayerEquipmentScript : MonoBehaviour
 
     private bool handSwitchActive = false;
 
+    public void RefillAmmo()
+    {
+        for (int i = 0; i < weaponReserveAmmo.Length; i++)
+        {
+            weaponReserveAmmo[i] += weaponDataArray[i].weaponMagSize * 2;
+        }
+    }
 
     #endregion
     #endregion

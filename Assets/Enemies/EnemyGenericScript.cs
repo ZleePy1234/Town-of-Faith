@@ -14,6 +14,8 @@ public class EnemyGenericScript : MonoBehaviour
     private Vector3 spawnPos;
     private Animator anim;
     public float attackRange;
+    public Vector3 rbdata;
+    private Rigidbody rb;
 
     //todo: add reference for specific enemy behaviour script here
     public enum State
@@ -26,6 +28,8 @@ public class EnemyGenericScript : MonoBehaviour
     public State state;
     void Awake()
     {
+        rb = GetComponent<Rigidbody>();
+        rbdata = rb.linearVelocity;
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.Find("Player");
         spawnPos = transform.position;
@@ -49,6 +53,7 @@ public class EnemyGenericScript : MonoBehaviour
                 break;
             case State.Combat:
                 state = State.Combat;
+                anim.SetBool("moving", true);
                 agent.SetDestination(player.transform.position);
                 break;
             case State.Dead:
@@ -61,12 +66,32 @@ public class EnemyGenericScript : MonoBehaviour
         }
     }
 
-    void TakeDamage(float damage)
+    public void TakeDamage(int damage)
     {
+        Debug.Log("Enemy took damage: " + damage);
+        if (state == State.Dead)
+        {
+            return;
+        }
         health -= damage;
-        health = Mathf.Round(health);
+        if (health <= 0)
+        {
+            Die();
+        }
     }
 
+    void Die()
+    {
+        state = State.Dead;
+        anim.SetTrigger("die");
+        agent.isStopped = true;
+        rb.isKinematic = true;
+        rb.useGravity = false;
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        //borrar destroy despues de agregar animaciones y logica extra
+        Destroy(gameObject);
+    }
     void DetectPlayer()
     {
         if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit))
@@ -92,7 +117,7 @@ public class EnemyGenericScript : MonoBehaviour
             float distance = Vector3.Distance(transform.position, player.transform.position);
             if (distance <= attackRange)
             {
-                if (anim.GetNextAnimatorStateInfo(0).IsName("attack"))
+                if (anim.GetNextAnimatorStateInfo(0).IsName("Attack"))
                 {
                     return;
                 }
@@ -106,10 +131,20 @@ public class EnemyGenericScript : MonoBehaviour
     public GameObject attackBox;
     void EnableAttackDamage()
     {
+        if (attackBox == null)
+        {
+            Debug.LogError("Attack box is not assigned or one is not needed");
+            return;
+        }
         attackBox.SetActive(true);
     }
     void DisableAttackDamage()
     {
+        if (attackBox == null)
+        {
+            Debug.LogError("Attack box is not assigned or one is not needed");
+            return;
+        }
         attackBox.SetActive(false);
     }
 

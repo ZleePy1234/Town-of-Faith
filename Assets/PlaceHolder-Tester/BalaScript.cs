@@ -33,13 +33,27 @@ public class BalaScript : MonoBehaviour
 
     void OnTriggerEnter(Collider collision)
     {
-        if(collision.CompareTag("DPSdummy"))
+        if (collision.CompareTag("DPSdummy"))
         {
             DPSdummy dPSdummy = collision.GetComponent<DPSdummy>();
             if (dPSdummy != null)
             {
                 dPSdummy.TakeDamage(bulletDamage);
             }
+            Destroy(gameObject);
+        }
+        else if (collision.CompareTag("Enemy"))
+        {
+            EnemyGenericScript enemy = collision.GetComponent<EnemyGenericScript>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(bulletDamage);
+            }
+            Destroy(gameObject);
+        }
+        else
+        {
+            Debug.Log("Bullet hit something else: " + collision.name);
             Destroy(gameObject);
         }
     }

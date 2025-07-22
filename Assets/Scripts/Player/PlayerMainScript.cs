@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerMainScript : MonoBehaviour
 {
@@ -87,7 +88,7 @@ public class PlayerMainScript : MonoBehaviour
                     healthCurrent -= damage / 2;
                     armorCurrent = 0;
                 }
-                
+
             }
         }
         else if (damageType == "environment")
@@ -103,6 +104,17 @@ public class PlayerMainScript : MonoBehaviour
         {
             Debug.Log("Damage doesnt fall into any type, damage nullified");
             healthCurrent -= 0;
+        }
+        
+        if(healthCurrent <= 0)
+        {
+            Debug.Log("Player is dead!");
+            // mas logica de muerte, placeholder.
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+        else
+        {
+            Debug.Log($"Player health: {healthCurrent}, Armor: {armorCurrent}");
         }
     }
 
@@ -126,11 +138,11 @@ public class PlayerMainScript : MonoBehaviour
         moveDirection = orientation.forward * vertical + orientation.right * horizontal;
         if (grounded)
         {
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+            rb.AddForce(10f * moveSpeed * moveDirection.normalized, ForceMode.Force);
         }
         else if (!grounded)
         {
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+            rb.AddForce(10f * airMultiplier * moveSpeed * moveDirection.normalized, ForceMode.Force);
         }
     }
     private void SpeedControl()
@@ -190,6 +202,7 @@ public class PlayerMainScript : MonoBehaviour
     }
     void Update()
     {
+        MaxStats();
         SpeedControl();
         StateHandler();
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, groundLayer);
@@ -203,5 +216,15 @@ public class PlayerMainScript : MonoBehaviour
         }
         Inputs();
     }
-    
+    void MaxStats()
+    {
+        if(healthCurrent > healthMax)
+        {
+            healthCurrent = healthMax;
+        }
+        if(armorCurrent > armorMax)
+        {
+            armorCurrent = armorMax;
+        }
+    }
 }
