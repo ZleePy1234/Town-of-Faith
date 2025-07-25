@@ -8,6 +8,7 @@ public class BalaScript : MonoBehaviour
     [SerializeField] private float bulletSpeed;
     public int bulletDamage;
     [SerializeField] private float bulletLifetime;
+    public bool rotateBullet = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     IEnumerator Start()
     {
@@ -21,6 +22,11 @@ public class BalaScript : MonoBehaviour
         rb.maxAngularVelocity = 0;
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
+        if (rotateBullet == true)
+        {
+            int i = Random.Range(0, 361);
+            transform.Rotate(0, 0, i);
+        }
     }
 
     // Update is called once per frame
@@ -54,6 +60,11 @@ public class BalaScript : MonoBehaviour
         else
         {
             Debug.Log("Bullet hit something else: " + collision.name);
+            if(collision.CompareTag("Bala"))
+            {
+                Debug.Log("Bullet hit itself or another in cluster, ignoring this collision.");
+                return;
+            }
             Destroy(gameObject);
         }
     }

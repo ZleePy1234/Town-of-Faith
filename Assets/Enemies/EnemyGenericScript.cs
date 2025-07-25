@@ -26,14 +26,18 @@ public class EnemyGenericScript : MonoBehaviour
     }
 
     public State state;
+
+    private EnemyCounter enemyCounter;
     void Awake()
     {
+        enemyCounter = GameObject.FindWithTag("EnemyCounter").GetComponent<EnemyCounter>();
         rb = GetComponent<Rigidbody>();
         rbdata = rb.linearVelocity;
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.Find("Player");
         spawnPos = transform.position;
         anim = GetComponent<Animator>();
+        enemyCounter.enemyCount++;
         //todo: add GetComponent of specific enemy behaviour script here
     }
 

@@ -75,10 +75,10 @@ public class PlayerEquipmentScript : MonoBehaviour
     // Weapon Structs
 
     static WeaponData emptyData = new WeaponData("Empty", 0, 0, 0.0f, 0.0f, 0);
-    static WeaponData pistolData = new WeaponData("Enforcer 9mm", 12, 9999, 0.5f, 1.5f, 1);
-    static WeaponData smgData = new WeaponData("Typewriter", 50, 250, 0.1f, 2.0f, 2);
-    static WeaponData shotgunData = new WeaponData("Boomstick", 3, 15, 1.0f, 3.0f, 3);
-    static WeaponData revolverData = new WeaponData(".500 Revenant", 5, 15, 2.5f, 4.0f, 4);
+    static WeaponData pistolData = new WeaponData("Enforcer 9mm", 12, 9999, 0.5f, 1.5f, 0);
+    static WeaponData smgData = new WeaponData("Typewriter", 50, 250, 0.1f, 2.0f, 1);
+    static WeaponData shotgunData = new WeaponData("Boomstick", 3, 15, 1.0f, 3.0f, 2);
+    static WeaponData revolverData = new WeaponData(".500 Revenant", 5, 15, 2.5f, 4.0f, 3);
     public WeaponData currentWeaponDataLeft;
     public WeaponData currentWeaponDataRight;
 
@@ -402,10 +402,22 @@ public class PlayerEquipmentScript : MonoBehaviour
 
     void FireLeftGun()
     {
+        if(weaponReserveAmmo[currentWeaponDataLeft.weaponID] <= 0)
+        {
+            Debug.Log("No ammo left for the left gun!");
+            return;
+        }
+        weaponReserveAmmo[currentWeaponDataLeft.weaponID]--;
         GameObject bulletFired = Instantiate(weaponBulletPrefabs[(int)selectedGunLeft], attackSpawn.transform.position, attackSpawn.transform.rotation);
     }
     void FireRightGun()
     {
+        if(weaponReserveAmmo[currentWeaponDataRight.weaponID] <= 0)
+        {
+            Debug.Log("No ammo left for the right gun!");
+            return;
+        }
+        weaponReserveAmmo[currentWeaponDataRight.weaponID]--;
         GameObject bulletFired = Instantiate(weaponBulletPrefabs[(int)selectedGunRight], attackSpawn.transform.position, attackSpawn.transform.rotation);
     }
 

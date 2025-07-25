@@ -139,7 +139,7 @@ MonoBehaviour:
   speed: 8
   agent: {fileID: 0}
   player: {fileID: 0}
-  attackRange: 20
+  attackRange: 40
   rbdata: {x: 0, y: 0, z: 0}
   state: 1
   attackBox: {fileID: 0}

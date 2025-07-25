@@ -37,7 +37,16 @@ public class MeleeHitboxScript : MonoBehaviour
     // Update is called once per frame
     private void OnTriggerEnter(Collider collision)
     {
-        if(collision.CompareTag("AreaLock"))
+        if(collision.CompareTag("Enemy"))
+        {
+            EnemyGenericScript enemy = collision.GetComponent<EnemyGenericScript>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(damage);
+                Debug.Log("Hit for " + damage + " damage");
+            }
+        }
+        else if(collision.CompareTag("AreaLock"))
         {
             Debug.Log("Area Lock Triggered");
             // Get the EnemyHealthScript component from the collided object
