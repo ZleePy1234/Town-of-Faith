@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -28,6 +29,14 @@ public class EnemyGenericScript : MonoBehaviour
     public State state;
 
     private EnemyCounter enemyCounter;
+
+    [Header("Boids")]
+
+    public int neighbourCount = 0;
+    public float boids_detectionDistance = 10f;
+    private Vector3 boids_separationForce;
+
+
     void Awake()
     {
         enemyCounter = GameObject.FindWithTag("EnemyCounter").GetComponent<EnemyCounter>();
@@ -40,11 +49,60 @@ public class EnemyGenericScript : MonoBehaviour
         enemyCounter.enemyCount++;
         //todo: add GetComponent of specific enemy behaviour script here
     }
+    private Collider[] GetNeighbours()
+    {
+        var enemyMask = LayerMask.GetMask("Enemy");
+        return Physics.OverlapSphere(transform.position, boids_detectionDistance, enemyMask);
+    }
 
     void Update()
     {
+        boids_separationForce = Vector3.zero;
         Combat();
         StateManager();
+        var neighbours = GetNeighbours();
+        neighbourCount = neighbours.Length;
+        if (neighbours.Length > 0)
+        {
+            CalculateSeparationForce(neighbours);
+            ApplyAlignment(neighbours);
+        }
+        Vector3 enemyDirection = agent.desiredVelocity.normalized;
+        var combinedDirection = (enemyDirection + boids_separationForce).normalized;
+        agent.velocity = combinedDirection * speed;
+    }
+
+    private void ApplyAlignment(Collider[] neighbours)
+    {
+        Vector3 neighbourForward = Vector3.zero;
+        foreach (var neighbour in neighbours)
+        {
+            neighbourForward += neighbour.transform.forward;
+        }
+        if (neighbourForward != Vector3.zero)
+        {
+            neighbourForward.Normalize();
+        }
+
+        boids_separationForce += neighbourForward;
+    }
+
+    private void CalculateSeparationForce(Collider[] neighbours)
+    {
+        //direction to neighbour
+        foreach (var neighbour in neighbours)
+        {
+            var dir = neighbour.transform.position - transform.position;
+            var distance = dir.magnitude;
+            var away = -dir.normalized;
+            if (distance > 0)
+            {
+                boids_separationForce += away / distance;
+            }
+        }
+        //distance to neighbour
+        // calculate opposite vector
+
     }
 
     void StateManager()

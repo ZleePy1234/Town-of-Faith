@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -91,6 +92,39 @@ public class PlayerEquipmentScript : MonoBehaviour
     [SerializeField] private WeaponData[] weaponDataArray = new WeaponData[5];
 
     private bool handSwitchActive = false;
+
+    public GameObject[] hud_HandInfoLeft;
+    public GameObject[] hud_HandInfoRight;
+
+    public void UpdateHandsInfo()
+    {
+        hud_HandInfoLeft[0].GetComponent<TextMeshProUGUI>().text = leftHandMode.ToString();
+        if (leftHandMode == LeftHandMode.melee)
+        {
+            hud_HandInfoLeft[1].GetComponent<TextMeshProUGUI>().text = selectedMeleeLeft.ToString();
+        }
+        else if (leftHandMode == LeftHandMode.gun)
+        {
+            hud_HandInfoLeft[1].GetComponent<TextMeshProUGUI>().text = selectedGunLeft.ToString();
+        }
+        else
+        {
+            hud_HandInfoLeft[1].GetComponent<TextMeshProUGUI>().text = "Equipment";
+        }
+        hud_HandInfoRight[0].GetComponent<TextMeshProUGUI>().text = rightHandMode.ToString();
+        if (rightHandMode == RightHandMode.melee)
+        {
+            hud_HandInfoRight[1].GetComponent<TextMeshProUGUI>().text = selectedMeleeRight.ToString();
+        }
+        else if (rightHandMode == RightHandMode.gun)
+        {
+            hud_HandInfoRight[1].GetComponent<TextMeshProUGUI>().text = selectedGunRight.ToString();
+        }
+        else
+        {
+            hud_HandInfoRight[1].GetComponent<TextMeshProUGUI>().text = "Equipment";
+        }
+    }
 
     public void RefillAmmo()
     {
@@ -219,6 +253,7 @@ public class PlayerEquipmentScript : MonoBehaviour
         yield return new WaitForSeconds(0.15f);
         canSwitchRight = true;
     }
+
     void Start()
     {
 
@@ -232,6 +267,7 @@ public class PlayerEquipmentScript : MonoBehaviour
         HandModeSwitch();
         HandModifier();
         ShootPen();
+        UpdateHandsInfo();
     }
 
 
@@ -301,6 +337,7 @@ public class PlayerEquipmentScript : MonoBehaviour
                 }
                 else
                 {
+                    meleeObtained[0] = false;
                     selectedMeleeLeft = SelectedMeleeLeft.Screwdriver;
                     selectedWeaponHitboxLeft = meleeHitboxArray[1];
                     return;
@@ -316,6 +353,7 @@ public class PlayerEquipmentScript : MonoBehaviour
                 }
                 else
                 {
+                    meleeObtained[0] = false;
                     selectedMeleeLeft = SelectedMeleeLeft.Cleaver;
                     selectedWeaponHitboxLeft = meleeHitboxArray[2];
                     return;
@@ -331,6 +369,7 @@ public class PlayerEquipmentScript : MonoBehaviour
                 }
                 else
                 {
+                    meleeObtained[0] = false;
                     selectedMeleeLeft = SelectedMeleeLeft.Hammer;
                     selectedWeaponHitboxLeft = meleeHitboxArray[3];
                     return;
@@ -367,6 +406,7 @@ public class PlayerEquipmentScript : MonoBehaviour
                 }
                 else
                 {
+                    meleeObtained[0] = false;
                     selectedMeleeRight = SelectedMeleeRight.Screwdriver;
                     selectedWeaponHitboxRight = meleeHitboxArray[1];
                     return;
@@ -380,6 +420,7 @@ public class PlayerEquipmentScript : MonoBehaviour
                 }
                 else
                 {
+                    meleeObtained[0] = false;
                     selectedMeleeRight = SelectedMeleeRight.Cleaver;
                     selectedWeaponHitboxRight = meleeHitboxArray[2];
                     return;
@@ -393,6 +434,7 @@ public class PlayerEquipmentScript : MonoBehaviour
                 }
                 else
                 {
+                    meleeObtained[0] = false;
                     selectedMeleeRight = SelectedMeleeRight.Hammer;
                     selectedWeaponHitboxRight = meleeHitboxArray[3];
                     return;
@@ -505,6 +547,7 @@ public class PlayerEquipmentScript : MonoBehaviour
                 }
                 else
                 {
+                    gunObtained[0] = false;
                     selectedGunLeft = SelectedGunLeft.Pistol;
                     currentWeaponDataLeft = pistolData;
                     return;
@@ -520,6 +563,7 @@ public class PlayerEquipmentScript : MonoBehaviour
                 }
                 else
                 {
+                    gunObtained[0] = false;
                     selectedGunLeft = SelectedGunLeft.Smg;
                     currentWeaponDataLeft = smgData;
                     return;
@@ -535,6 +579,7 @@ public class PlayerEquipmentScript : MonoBehaviour
                 }
                 else
                 {
+                    gunObtained[0] = false;
                     selectedGunLeft = SelectedGunLeft.Shotgun;
                     currentWeaponDataLeft = shotgunData;
                     return;
@@ -550,6 +595,7 @@ public class PlayerEquipmentScript : MonoBehaviour
                 }
                 else
                 {
+                    gunObtained[0] = false;
                     selectedGunLeft = SelectedGunLeft.Revolver;
                     currentWeaponDataLeft = revolverData;
                     return;
@@ -590,6 +636,7 @@ public class PlayerEquipmentScript : MonoBehaviour
                 }
                 else
                 {
+                    gunObtained[0] = false;
                     selectedGunRight = SelectedGunRight.Pistol;
                     currentWeaponDataRight = pistolData;
                     return;
@@ -605,6 +652,7 @@ public class PlayerEquipmentScript : MonoBehaviour
                 }
                 else
                 {
+                    gunObtained[0] = false;
                     selectedGunRight = SelectedGunRight.Smg;
                     currentWeaponDataRight = smgData;
                     return;
@@ -620,6 +668,7 @@ public class PlayerEquipmentScript : MonoBehaviour
                 }
                 else
                 {
+                    gunObtained[0] = false;
                     selectedGunRight = SelectedGunRight.Shotgun;
                     currentWeaponDataRight = shotgunData;
                     return;
@@ -635,6 +684,7 @@ public class PlayerEquipmentScript : MonoBehaviour
                 }
                 else
                 {
+                    gunObtained[0] = false;
                     selectedGunRight = SelectedGunRight.Revolver;
                     currentWeaponDataRight = revolverData;
                     return;
