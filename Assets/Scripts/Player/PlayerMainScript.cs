@@ -18,8 +18,8 @@ public class PlayerMainScript : MonoBehaviour
     public float dashBoostSpeed = 2f; // Speed boost during dash
     public Transform orientation;
 
-    float horizontal;
-    float vertical;
+    public float horizontal;
+    public float vertical;
 
     Vector3 moveDirection;
     Rigidbody rb;

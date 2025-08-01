@@ -1,8 +1,6 @@
 using System.Collections;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PlayerEquipmentScript : MonoBehaviour
 {
@@ -96,6 +94,18 @@ public class PlayerEquipmentScript : MonoBehaviour
     public GameObject[] hud_HandInfoLeft;
     public GameObject[] hud_HandInfoRight;
 
+
+    #region Animators
+    [Header("Animators")]
+    [SerializeField] private GameObject[] rightHandGunAnimations = new GameObject[4];
+    [SerializeField] private RightHandAnimations rightHandAnimations;
+    [SerializeField] private GameObject[] rightHandMeleeAnimations = new GameObject[4];
+    [Space(10)]
+    [SerializeField] private GameObject[] leftHandGunAnimations = new GameObject[4];
+    [SerializeField] private RightHandAnimations leftHandAnimations;
+    [SerializeField] private GameObject[] leftHandMeleeAnimations = new GameObject[4];
+    #endregion
+
     public void UpdateHandsInfo()
     {
         hud_HandInfoLeft[0].GetComponent<TextMeshProUGUI>().text = leftHandMode.ToString();
@@ -133,12 +143,38 @@ public class PlayerEquipmentScript : MonoBehaviour
             weaponReserveAmmo[i] += weaponDataArray[i].weaponMagSize * 2;
         }
     }
+    private PlayerMainScript playerMainScript;
 
     #endregion
     #endregion
     void Awake()
     {
         WeaponTesting();
+        playerMainScript = GetComponent<PlayerMainScript>();
+    }
+
+    void CurrentAnimations()
+    {
+        if(rightHandMode == RightHandMode.gun)
+        {
+            rightHandAnimations = rightHandGunAnimations[(int)selectedGunRight].GetComponent<RightHandAnimations>();
+        }
+        //else if(rightHandMode == RightHandMode.melee)
+        //{
+            //rightHandAnimations = rightHandMeleeAnimations[(int)selectedMeleeRight].GetComponent<RightHandAnimations>();
+        //}
+    }
+
+    void AnimationPlayer()
+    {
+        if (playerMainScript.horizontal != 0 || playerMainScript.vertical != 0)
+        {
+            rightHandAnimations.Moving();
+        }
+        else
+        {
+            rightHandAnimations.NotMoving();
+        }
     }
 
     void WeaponTesting()
@@ -268,6 +304,11 @@ public class PlayerEquipmentScript : MonoBehaviour
         HandModifier();
         ShootPen();
         UpdateHandsInfo();
+        if(rightHandAnimations != null)
+        {
+            CurrentAnimations();
+            AnimationPlayer();
+        }
     }
 
 
@@ -454,13 +495,17 @@ public class PlayerEquipmentScript : MonoBehaviour
     }
     void FireRightGun()
     {
-        if(weaponReserveAmmo[currentWeaponDataRight.weaponID] <= 0)
+        if (weaponReserveAmmo[currentWeaponDataRight.weaponID] <= 0)
         {
             Debug.Log("No ammo left for the right gun!");
             return;
         }
         weaponReserveAmmo[currentWeaponDataRight.weaponID]--;
         GameObject bulletFired = Instantiate(weaponBulletPrefabs[(int)selectedGunRight], attackSpawn.transform.position, attackSpawn.transform.rotation);
+        if (rightHandAnimations != null)
+        {
+            rightHandAnimations.Attack();
+        }
     }
 
     private bool canShootLeft = true;
@@ -639,6 +684,12 @@ public class PlayerEquipmentScript : MonoBehaviour
                     gunObtained[0] = false;
                     selectedGunRight = SelectedGunRight.Pistol;
                     currentWeaponDataRight = pistolData;
+                    rightHandAnimations = rightHandGunAnimations[1].GetComponent<RightHandAnimations>();
+                    foreach (GameObject anims in rightHandGunAnimations)
+                    {
+                        anims.SetActive(false);
+                    }
+                    rightHandGunAnimations[1].SetActive(true);
                     return;
                 }
             case 2:

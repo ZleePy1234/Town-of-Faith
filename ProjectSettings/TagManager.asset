@@ -13,6 +13,7 @@ TagManager:
   - Bala
   - DPSdummy
   - Ground
+  - RightAnim
   layers:
   - Default
   - TransparentFX
